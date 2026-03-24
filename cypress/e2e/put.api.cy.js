@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 
-describe('Exclusão de dispositivo', () => {    
+describe('Atualização de dispositivo', () => {    
     
-    it('Excluir dispositivo', () => {
+    it('Atualizar dispositivo', () => {
 
         const body_post = {
 	            "name": "Apple PUT Alterado",
@@ -52,6 +52,35 @@ describe('Exclusão de dispositivo', () => {
                     expect(response_put.body.data.price).equal(body_put.data.price);
                     expect(response_put.body.data['CPU model']).equal(body_put.data['CPU model']);
                     expect(response_put.body.data['Hard disk size']).equal(body_put.data['Hard disk size']);
+            });
+        });
+    });
+
+    it('Atualizar dispositivo inexistente', () => {
+
+        const body_put = {
+	            "name": "Apple PUT PUT Update",
+	            "data": {
+		            "year": 2026,
+		            "price": 8999.99,
+		            "CPU model": "Intel Core z11",
+		            "Hard disk size": "4 TB"
+	                    }
+                }                
+           const id_inexistente = 9999999999999; // ID que não existe                
+            cy.request({                
+                method: 'PUT',
+                url: `/objects/${id_inexistente}`,
+                failOnStatusCode: false,
+                body: body_put
+            }).as('putNoExistentDeviceResult');
+            
+            // validações do put
+            cy.get('@putNoExistentDeviceResult').then((response_put_noexistent) => {
+                    cy.get('@putNoExistentDeviceResult').then((response_put_noexistent) => {
+                expect(response_put_noexistent.status).equal(404);
+                expect(response_put_noexistent.body.error)
+                    .equal(`The Object with id = ${id_inexistente} doesn't exist. Please provide an object id which exists or generate a new Object using POST request and capture the id of it to use it as part of PUT request after that.`);
             });
         });
     });

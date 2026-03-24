@@ -40,11 +40,11 @@ describe('Exclusão de dispositivo', () => {
             method: 'DELETE',
             url: `/objects/${id_inexistente}`,
             failOnStatusCode: false,
-        }).as('deleteNonExistentDeviceResult');
+        }).as('deleteNoExistentDeviceResult');
         // validações do delete para ID inexistente
-        cy.get('@deleteNonExistentDeviceResult').then((response_del_nonexistent) => {
-                expect(response_del_nonexistent.status).equal(404);
-                expect(response_del_nonexistent.body.error)
+        cy.get('@deleteNoExistentDeviceResult').then((response_del_noexistent) => {
+                expect(response_del_noexistent.status).equal(404);
+                expect(response_del_noexistent.body.error)
                     .equal(`Object with id = ${id_inexistente} doesn't exist.`);
         });
 
